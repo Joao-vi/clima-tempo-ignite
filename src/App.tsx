@@ -155,7 +155,7 @@ function App() {
           ],
           xAxis: {
             type: 'category',
-            data: currentStation.ignite.x.map((i) =>
+            data: currentStation['clima-tempo'].x.map((i) =>
               DateUtils.getLocalDayMonthHourMinutesString(i)
             ),
             axisLine: {
