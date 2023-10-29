@@ -13,12 +13,12 @@ import { LegendOption } from 'echarts/types/dist/shared'
 
 export const setup = () =>
   use([
+    LegendComponent,
     CanvasRenderer,
     LineChart,
     GridComponent,
     TooltipComponent,
     DataZoomComponent,
-    LegendComponent,
   ])
 
 export type EChartOptions = ComposeOption<LineSeriesOption | GridComponentOption | LegendOption>

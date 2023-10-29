@@ -1,19 +1,8 @@
 import { graphic } from 'echarts/core'
 
-import climaTempoRaw from './mocks/clima-tempo.json'
-import { useReducer, useState } from 'react'
+import ignite from './mocks/ignite/forecast.json'
+import climaTempo from './mocks/clima-tempo/forecast.json'
 
-import jauIgnite from './mocks/ignite/jau.json'
-import jauClimaTempo from './mocks/clima-tempo/jau.json'
-
-import kinDiasIgnite from './mocks/ignite/kin-dias.json'
-import kinDiasClimaTempo from './mocks/clima-tempo/kin-dias.json'
-
-import saoPedroIgnite from './mocks/ignite/sao-pedro.json'
-import saoPedroClimaTempo from './mocks/clima-tempo/sao-pedro.json'
-
-import apmRuralIgnite from './mocks/ignite/apm-rural.json'
-import apmRuralClimaTempo from './mocks/clima-tempo/apm-rural.json'
 import { Chart } from './components/ui/chart'
 
 const getIgniteData = (data: any) => ({
@@ -23,61 +12,12 @@ const getIgniteData = (data: any) => ({
 
 const getClimaTempoData = (data: any) => ({ x: data.data.map((i) => i.date), data: data.data })
 
-const climaTempo = {
-  days: climaTempoRaw.data.map((i) => i.date),
-  data: climaTempoRaw.data.map((i) => i.rain.precipitation),
-}
+const igniteData = getIgniteData(ignite)
+const climaTempoData = getClimaTempoData(climaTempo)
 
-const stations = {
-  jau: {
-    ignite: {
-      ...getIgniteData(jauIgnite),
-    },
-
-    'clima-tempo': {
-      ...getClimaTempoData(jauClimaTempo),
-    },
-  },
-
-  'kin-dias': {
-    ignite: {
-      ...getIgniteData(kinDiasIgnite),
-    },
-
-    'clima-tempo': {
-      ...getClimaTempoData(kinDiasClimaTempo),
-    },
-  },
-
-  'sao-pedro': {
-    ignite: {
-      ...getIgniteData(saoPedroIgnite),
-    },
-
-    'clima-tempo': {
-      ...getClimaTempoData(saoPedroClimaTempo),
-    },
-  },
-
-  'apm-rural': {
-    ignite: {
-      ...getIgniteData(apmRuralIgnite),
-    },
-
-    'clima-tempo': {
-      ...getClimaTempoData(apmRuralClimaTempo),
-    },
-  },
-}
+console.log(climaTempoData)
 
 function App() {
-  const [station, setStation] = useState<'sao-pedro' | 'kin-dias' | 'jau' | 'apm-rural'>(
-    'sao-pedro'
-  )
-  const [_, render] = useReducer((state) => !state, false)
-
-  const currentStation = stations[station]
-
   return (
     <div
       style={{
@@ -90,25 +30,10 @@ function App() {
         gap: '2rem',
       }}
     >
-      <div
-        style={{ width: 100, height: 100 }}
-        className="bg-blue-500 hover:bg-red-500"
-      />
-
-      <select
-        onChange={(e) => setStation(e.target.value)}
-        value={station}
-        name="stations"
-        id="stations"
-      >
-        <option value="sao-pedro">São Pedro</option>
-        <option value="kin-dias">Kin dias</option>
-        <option value="jau">Jau</option>
-        <option value="apm-rural">Apm Rural</option>
-      </select>
+      <h1>Cidade: Piracaia</h1>
 
       <Chart.Root
-        className="w-[500px] h-[500px]"
+        className="w-[700px] h-[500px]"
         isLoading={false}
         hasData
         option={{
@@ -117,7 +42,7 @@ function App() {
             {
               type: 'line',
               name: 'Chuva - Ignite',
-              data: currentStation.ignite.data.map((i) => i.daily?.rainfall || 0),
+              data: igniteData.data.map((i) => i.daily.rainfall),
               smooth: 1,
               areaStyle: {
                 color: new graphic.LinearGradient(0, 0, 0, 1, [
@@ -140,7 +65,7 @@ function App() {
             {
               type: 'line',
               name: 'Chuva - Clima tempo',
-              data: currentStation['clima-tempo'].data.map((i) => i.rain.precipitation || 0),
+              data: climaTempoData.data.map((i) => i.rain.precipitation),
               smooth: 1,
               areaStyle: {
                 color: new graphic.LinearGradient(0, 0, 0, 1, [
@@ -163,9 +88,7 @@ function App() {
           ],
           xAxis: {
             type: 'category',
-            data: currentStation['clima-tempo'].x.map((i) =>
-              DateUtils.getLocalDayMonthHourMinutesString(i)
-            ),
+            data: igniteData.x.map((i) => DateUtils.getLocalDayMonthHourMinutesString(i)),
             axisLine: {
               lineStyle: {
                 color: '#a1a1aa',
