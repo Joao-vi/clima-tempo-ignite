@@ -1,4 +1,3 @@
-import { Chart } from './components/chart'
 import { graphic } from 'echarts/core'
 
 import climaTempoRaw from './mocks/clima-tempo.json'
@@ -15,6 +14,7 @@ import saoPedroClimaTempo from './mocks/clima-tempo/sao-pedro.json'
 
 import apmRuralIgnite from './mocks/ignite/apm-rural.json'
 import apmRuralClimaTempo from './mocks/clima-tempo/apm-rural.json'
+import { Chart } from './components/ui/chart'
 
 const getIgniteData = (data: any) => ({
   x: Object.keys(data) as any,
@@ -90,6 +90,11 @@ function App() {
         gap: '2rem',
       }}
     >
+      <div
+        style={{ width: 100, height: 100 }}
+        className="bg-blue-500 hover:bg-red-500"
+      />
+
       <select
         onChange={(e) => setStation(e.target.value)}
         value={station}
@@ -102,7 +107,10 @@ function App() {
         <option value="apm-rural">Apm Rural</option>
       </select>
 
-      <Chart
+      <Chart.Root
+        className="w-[500px] h-[500px]"
+        isLoading={false}
+        hasData
         option={{
           legend: {},
           series: [
@@ -202,7 +210,9 @@ function App() {
             height: 'auto',
           },
         }}
-      />
+      >
+        <Chart.Content />
+      </Chart.Root>
     </div>
   )
 }
