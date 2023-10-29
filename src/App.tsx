@@ -90,11 +90,6 @@ function App() {
         gap: '2rem',
       }}
     >
-      <div
-        style={{ width: 100, height: 100 }}
-        className="bg-blue-500 hover:bg-red-500"
-      />
-
       <select
         onChange={(e) => setStation(e.target.value)}
         value={station}
